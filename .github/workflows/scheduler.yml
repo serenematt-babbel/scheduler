@@ -1,8 +1,10 @@
 name: scheduler
 
-on:
+on: 
+  push:
+    branches: main
   schedule:
-    - cron: "*/2 7-19 * * 1-5" # Every 10 minutes from 7:00 to 19:00 only on weekdays.
+    - cron: "*/1 6-18 * * 1-5" # Runs Monday to Friday every 10 minutes from 7:00 to 19:00.
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -17,7 +19,7 @@ jobs:
   build:
     name: build
 
-    runs-on: ubuntu-20.04-16core
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     strategy:
