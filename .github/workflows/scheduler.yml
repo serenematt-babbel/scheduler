@@ -1,0 +1,31 @@
+name: scheduler
+
+on:
+  schedule:
+    - cron: "*/2 7-19 * * 1-5" # Every 10 minutes from 7:00 to 19:00 only on weekdays.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+  statuses: write
+
+jobs:
+  build:
+    name: build
+
+    runs-on: ubuntu-20.04-16core
+    timeout-minutes: 30
+
+    strategy:
+      matrix:
+        environment: [production, staging]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Current time
+        run: echo "Scheduler executed at $(date +"%T")"
