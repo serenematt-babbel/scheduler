@@ -30,10 +30,9 @@ jobs:
 
     strategy:
       matrix:
-        environment:
-          - production
-          - staging:
-              if: ${{ github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6') }} 
+        environment: 
+          - ${{ github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6') }} && 'staging'
+          - ${{ github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule.cron != '0 11,17 * * 0-6') }} && 'production'
 
     steps:
       - uses: actions/checkout@v4
