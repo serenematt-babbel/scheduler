@@ -2,7 +2,10 @@ name: scheduler
 
 on:
   schedule:
-    - cron: "*/5 6-14 * * 1-5" # Runs every 10 minutes, between from 7:00 to 19:00 CET, Monday to Friday.
+    - cron: "*/10 6-17 * * 1-5" # Runs production build every 10 minutes, between 7:00 and 18:59 CET, Monday to Friday.
+    - cron: "0 18-23,0-5 * * 1-5" # Runs production build every hour, between 19:00 and 6:59 CET, Monday to Friday.
+    - cron: "0 11,17 * * 6,0" # Runs production and staging builds at 12:00 and 18:00 CET, on Saturday and Sunday.
+    - cron: "0 11,17 * * 1-5" # Runs staging builds at 12:00 and 18:00 CET, every day.
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        environment: [production, staging]
+        environment: ${{ (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 1-5') && 'staging' || 'production, staging' }}
 
     steps:
       - uses: actions/checkout@v4
