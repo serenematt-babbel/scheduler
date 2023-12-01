@@ -1,6 +1,11 @@
 name: scheduler
 
 on:
+
+  push:
+    branches:
+      - main
+
   schedule:
     - cron: "*/10 6-17 * * 1-5" # Runs production build every 10 minutes, between 7:00 and 18:59 CET, Monday to Friday.
     - cron: "0 18-23,0-5 * * 1-5" # Runs production build every hour, between 19:00 and 6:59 CET, Monday to Friday.
