@@ -31,14 +31,17 @@ jobs:
     strategy:
       matrix:
         environment: [production, staging]
+        scheduler: [true, false]
         exclude:
           - environment: production
-            if: ${{ github.event_name != 'push' && (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 6,0') }}
+            scheduler: ${{ github.event_name == 'push' && (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6') }}
           - environment: staging
-            if: ${{ github.event_name != 'push' && (github.event_name == 'schedule' && github.event.schedule.cron != '0 11,17 * * 0-6') }}
+            scheduler: ${{ github.event_name != 'push' && (github.event_name == 'schedule' && github.event.schedule.cron != '0 11,17 * * 0-6') }}
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Current time
-        run: echo "Scheduler executed at $(date +"%T")"
+        run: |
+          echo "Scheduler executed at $(date +"%T")"
+          echo "Matrix environment: ${{ matrix.environment }}"
