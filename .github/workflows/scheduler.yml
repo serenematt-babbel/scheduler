@@ -31,7 +31,7 @@ jobs:
     strategy:
       matrix:
         environment: [production, staging]
-        scheduler: [true, false]
+        scheduler: [false]
         exclude:
           - environment: production
             scheduler: ${{ github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6') }}
