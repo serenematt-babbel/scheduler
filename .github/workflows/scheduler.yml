@@ -31,11 +31,12 @@ jobs:
     strategy:
       matrix:
         environment: [production, staging]
+        scheduler: [true, false]
         exclude:
           - environment: production
-            ${{ github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6' }}: true
+            scheduler: ${{ github.event_name != 'push' && (github.event_name == 'schedule' && github.event.schedule.cron == '0 11,17 * * 0-6') }}
           - environment: staging
-            ${{ github.event_name == 'schedule' && github.event.schedule.cron != '0 11,17 * * 0-6' }}: true
+            scheduler: ${{ github.event_name != 'push' && (github.event_name == 'schedule' && github.event.schedule.cron != '0 11,17 * * 0-6') }}
 
     steps:
       - uses: actions/checkout@v4
