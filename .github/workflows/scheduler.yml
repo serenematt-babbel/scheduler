@@ -44,5 +44,5 @@ jobs:
       - name: Current time
         run: |
           echo "Scheduler executed at $(date +"%T")"
-          echo "Scheduler context: ${{ github.event.schedule}}"
+          echo "Scheduler context: ${{ github.event.schedule.cron }}"
           echo "Matrix environment: ${{ matrix.environment }}"
